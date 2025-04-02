@@ -96,17 +96,17 @@ function iterateTurn() {
 }
 
 function roll() {
-	if (iterateRoll()) {
-		//Randomizes value 1-6 for each die
-		for (var i = 0; i < 5; i++) {
-			if (dice[i].locked == false) {
-				var result = Math.ceil(Math.random() * 6);
-				var id = "die" + i;
-				dice[i].value = result;
-			}
+	//if (iterateRoll()) {
+	//Randomizes value 1-6 for each die
+	for (var i = 0; i < 5; i++) {
+		if (dice[i].locked == false) {
+			var result = Math.ceil(Math.random() * 6);
+			var id = "die" + i;
+			dice[i].value = result;
 		}
-		place();
 	}
+	place();
+	//}
 }
 
 function place() {
@@ -132,24 +132,25 @@ function scoreRoll(category) {
 		valueFrequency[die] ? valueFrequency[die]++ : (valueFrequency[die] = 1)
 	);
 
-	console.log(diceValues);
-	console.log(valueFrequency);
+	var valsFreqSorted = Object.values(valueFrequency).sort();
+	var highestFreq = valsFreqSorted.slice(-1)[0];
+	const diceTotal = diceValues.reduce((a, current) => a + current, 0);
+	console.log(valsFreqSorted);
+
 	const scoreRules = {
-		aces: () => {
-			return valueFrequency[1] * 1;
-		},
-		twos: "function goes here",
-		threes: "function goes here",
-		fours: "function goes here",
-		fives: "function goes here",
-		sixes: "function goes here",
-		threeofakind: "function goes here",
-		fourofakind: "function goes here",
-		fullhouse: "function goes here",
+		aces: valueFrequency[1] * 1,
+		twos: valueFrequency[2] * 2,
+		threes: valueFrequency[3] * 3,
+		fours: valueFrequency[4] * 4,
+		fives: valueFrequency[5] * 5,
+		sixes: valueFrequency[6] * 6,
+		threeofakind: highestFreq >= 3 ? diceTotal : 0,
+		fourofakind: highestFreq >= 4 ? diceTotal : 0,
+		fullhouse: valsFreqSorted == [2, 3] ? 25 : 0,
 		smallstraight: "function goes here",
 		largestraight: "function goes here",
-		firstyahtzee: "function goes here",
-		chance: "function goes here",
+		firstyahtzee: highestFreq == 5 ? 50 : 0,
+		chance: diceTotal,
 	};
 
 	var score = scoreRules[category];
