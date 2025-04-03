@@ -54,21 +54,21 @@ var turnCount = 0;
 var rollCount = 0;
 
 const scorecard = {
-	aces: {},
-	twos: {},
-	threes: {},
-	fours: {},
-	fives: {},
-	sixes: {},
-	upperbonus: {},
-	threeofakind: {},
-	fourofakind: {},
-	fullhouse: {},
-	smallstraight: {},
-	largestraight: {},
-	firstyahtzee: {},
-	chance: {},
-	bonusyahtzees: {},
+	aces: null,
+	twos: null,
+	threes: null,
+	fours: null,
+	fives: null,
+	sixes: null,
+	upperbonus: null,
+	threeofakind: null,
+	fourofakind: null,
+	fullhouse: null,
+	smallstraight: null,
+	largestraight: null,
+	firstyahtzee: null,
+	chance: null,
+	bonusyahtzees: null,
 };
 
 function iterateRoll() {
@@ -122,17 +122,22 @@ function place() {
 
 function checkStraight(diceValues, strtLen) {
 	var diceOccurred = [...new Set(diceValues)].sort();
-	console.log(diceOccurred);
+
 	if (diceOccurred.length < strtLen) {
 		return false;
 	}
-}
+	if (strtLen == 5) {
+		return diceValues.includes(6) == false || diceValues.includes(1) == false;
+	}
+	if (strtLen == 4) {
+		const validSmStrts = ["1234", "2345", "3456"];
+		var diceOccString = diceOccurred.join("");
+		var smStrtValid = false;
+		validSmStrts.forEach((opt) =>
+			diceOccString.includes(opt) ? (smStrtValid = true) : null
+		);
 
-function scorebyFreq(n) {
-	if (valueFrequency[n] == null) {
-		return 0;
-	} else {
-		return valueFrequency[n] * n;
+		return smStrtValid;
 	}
 }
 
@@ -145,6 +150,11 @@ function scoreRoll(category) {
 		dice[4].value,
 	];
 
+	if (diceValues.includes(null)) {
+		console.log("Cannot score null dice");
+		return false;
+	}
+
 	const valueFrequency = {};
 
 	diceValues.forEach((die) =>
@@ -156,22 +166,23 @@ function scoreRoll(category) {
 	const diceTotal = diceValues.reduce((a, current) => a + current, 0);
 
 	const scoreRules = {
-		aces: scorebyFreq(1),
-		twos: scorebyFreq(2),
-		threes: scorebyFreq(3),
-		fours: scorebyFreq(4),
-		fives: scorebyFreq(5),
-		sixes: scorebyFreq(6),
-		threeofakind: highestFreq >= 3 ? diceTotal : 0,
-		fourofakind: highestFreq >= 4 ? diceTotal : 0,
-		fullhouse: valsFreqSorted[0] == 2 && valsFreqSorted[1] == 3 ? 25 : 0,
-		smallstraight: checkStraight(diceValues, 4) ? 30 : 0,
-		largestraight: checkStraight(diceValues, 5) ? 40 : 0,
-		firstyahtzee: highestFreq == 5 ? 50 : 0,
-		chance: diceTotal,
+		aces: () => scorebyFreq(1),
+		twos: () => scorebyFreq(2),
+		threes: () => scorebyFreq(3),
+		fours: () => scorebyFreq(4),
+		fives: () => scorebyFreq(5),
+		sixes: () => scorebyFreq(6),
+		threeofakind: () => (highestFreq >= 3 ? diceTotal : 0),
+		fourofakind: () => (highestFreq >= 4 ? diceTotal : 0),
+		fullhouse: () =>
+			valsFreqSorted[0] == 2 && valsFreqSorted[1] == 3 ? 25 : 0,
+		smallstraight: () => (checkStraight(diceValues, 4) ? 30 : 0),
+		largestraight: () => (checkStraight(diceValues, 5) ? 40 : 0),
+		firstyahtzee: () => (highestFreq == 5 ? 50 : 0),
+		chance: () => diceTotal,
 	};
 
-	var score = scoreRules[category];
+	var score = scoreRules[category]();
 
 	scorecard[category] = score;
 	var scoreElement = document.querySelector("#" + category + "-score");
@@ -188,6 +199,11 @@ function scoreRoll(category) {
 			return valueFrequency[n] * n;
 		}
 	}
+}
+
+function checkUpperBonus() {
+	const scorecardValues = Object.values(scorecard);
+	console.log(scorecardValues);
 }
 
 function resetDice() {
