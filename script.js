@@ -87,6 +87,7 @@ function iterateRoll() {
 function iterateTurn() {
 	if (turnCount < 13) {
 		turnCount++;
+		resetDice();
 		document.getElementById("turnCount").textContent = turnCount + "/13";
 		return true;
 	} else {
@@ -96,24 +97,42 @@ function iterateTurn() {
 }
 
 function roll() {
-	//if (iterateRoll()) {
-	//Randomizes value 1-6 for each die
-	for (var i = 0; i < 5; i++) {
-		if (dice[i].locked == false) {
-			var result = Math.ceil(Math.random() * 6);
-			var id = "die" + i;
-			dice[i].value = result;
-		}
+	if (turnCount == 0) {
+		iterateTurn();
 	}
-	place();
-	//}
+	if (iterateRoll()) {
+		//Randomizes value 1-6 for each die
+		for (var i = 0; i < 5; i++) {
+			if (dice[i].locked == false) {
+				var result = Math.ceil(Math.random() * 6);
+				var id = "die" + i;
+				dice[i].value = result;
+			}
+		}
+		place();
+	}
 }
 
 function place() {
-	//Changes dice display to match values
 	for (var i = 0; i < 5; i++) {
 		var id = "die" + i;
-		document.getElementById(id).textContent = dice[i].value;
+		document.getElementById(id).innerHTML = dice[i].value;
+	}
+}
+
+function checkStraight(diceValues, strtLen) {
+	var diceOccurred = [...new Set(diceValues)].sort();
+	console.log(diceOccurred);
+	if (diceOccurred.length < strtLen) {
+		return false;
+	}
+}
+
+function scorebyFreq(n) {
+	if (valueFrequency[n] == null) {
+		return 0;
+	} else {
+		return valueFrequency[n] * n;
 	}
 }
 
@@ -135,37 +154,53 @@ function scoreRoll(category) {
 	var valsFreqSorted = Object.values(valueFrequency).sort();
 	var highestFreq = valsFreqSorted.slice(-1)[0];
 	const diceTotal = diceValues.reduce((a, current) => a + current, 0);
-	console.log(valsFreqSorted);
 
 	const scoreRules = {
-		aces: valueFrequency[1] * 1,
-		twos: valueFrequency[2] * 2,
-		threes: valueFrequency[3] * 3,
-		fours: valueFrequency[4] * 4,
-		fives: valueFrequency[5] * 5,
-		sixes: valueFrequency[6] * 6,
+		aces: scorebyFreq(1),
+		twos: scorebyFreq(2),
+		threes: scorebyFreq(3),
+		fours: scorebyFreq(4),
+		fives: scorebyFreq(5),
+		sixes: scorebyFreq(6),
 		threeofakind: highestFreq >= 3 ? diceTotal : 0,
 		fourofakind: highestFreq >= 4 ? diceTotal : 0,
-		fullhouse: valsFreqSorted == [2, 3] ? 25 : 0,
-		smallstraight: "function goes here",
-		largestraight: "function goes here",
+		fullhouse: valsFreqSorted[0] == 2 && valsFreqSorted[1] == 3 ? 25 : 0,
+		smallstraight: checkStraight(diceValues, 4) ? 30 : 0,
+		largestraight: checkStraight(diceValues, 5) ? 40 : 0,
 		firstyahtzee: highestFreq == 5 ? 50 : 0,
 		chance: diceTotal,
 	};
 
 	var score = scoreRules[category];
-	//var scoreElement = querySelector("use-roll-" + category);
-	console.log(score);
+
+	scorecard[category] = score;
+	var scoreElement = document.querySelector("#" + category + "-score");
+	scoreElement.innerHTML = score;
 	rollCount = 0;
 	document.getElementById("rollCount").textContent = rollCount + "/3";
 	iterateTurn();
 	return score;
+
+	function scorebyFreq(n) {
+		if (valueFrequency[n] == null) {
+			return 0;
+		} else {
+			return valueFrequency[n] * n;
+		}
+	}
 }
 
 function resetDice() {
-	Object(dice).forEach((die) => {
+	Object.values(dice).forEach((die) => {
 		die.value = null;
+		die.locked = false;
+
+		for (var i = 0; i < 5; i++) {
+			var id = "lock" + i;
+			document.getElementById(id).style.visibility = "hidden";
+		}
 	});
+	place();
 }
 
 function playShakeSound() {
@@ -193,17 +228,6 @@ function showGridShake() {
 		}, 1800);
 	}
 	roll();
-}
-
-function stopGame() {
-	clearTimer();
-	clearGrid();
-	changeButton();
-}
-
-function clearTimer() {
-	clearInterval(timerInterval);
-	document.querySelector("#time").textContent = "04:00";
 }
 
 function clearGrid() {
