@@ -71,6 +71,8 @@ const scorecard = {
 	bonusyahtzees: null,
 };
 
+// jacob's hi score: 270
+
 function iterateRoll() {
 	if (rollCount < 3) {
 		rollCount++;
@@ -85,13 +87,14 @@ function iterateRoll() {
 }
 
 function iterateTurn() {
-	if (turnCount < 13) {
-		turnCount++;
+	turnCount++;
+	if (turnCount <= 13) {
 		resetDice();
 		document.getElementById("turnCount").textContent = turnCount + "/13";
 		return true;
 	} else {
 		console.log("Game over!");
+		resetDice();
 		return false;
 	}
 }
@@ -100,16 +103,18 @@ function roll() {
 	if (turnCount == 0) {
 		iterateTurn();
 	}
-	if (iterateRoll()) {
-		//Randomizes value 1-6 for each die
-		for (var i = 0; i < 5; i++) {
-			if (dice[i].locked == false) {
-				var result = Math.ceil(Math.random() * 6);
-				var id = "die" + i;
-				dice[i].value = result;
+	if (turnCount <= 13) {
+		if (iterateRoll()) {
+			//Randomizes value 1-6 for each die
+			for (var i = 0; i < 5; i++) {
+				if (dice[i].locked == false) {
+					var result = Math.ceil(Math.random() * 6);
+					var id = "die" + i;
+					dice[i].value = result;
+				}
 			}
+			place();
 		}
-		place();
 	}
 }
 
@@ -140,6 +145,8 @@ function checkStraight(diceValues, strtLen) {
 		return smStrtValid;
 	}
 }
+
+function scoreBonusYahtzee() {}
 
 function scoreRoll(category) {
 	const diceValues = [
@@ -180,6 +187,7 @@ function scoreRoll(category) {
 		largestraight: () => (checkStraight(diceValues, 5) ? 40 : 0),
 		firstyahtzee: () => (highestFreq == 5 ? 50 : 0),
 		chance: () => diceTotal,
+		bonusyahtzees: () => false,
 	};
 
 	var score = scoreRules[category]();
@@ -190,6 +198,7 @@ function scoreRoll(category) {
 	rollCount = 0;
 	document.getElementById("rollCount").textContent = rollCount + "/3";
 	iterateTurn();
+	checkUpperBonus();
 	return score;
 
 	function scorebyFreq(n) {
@@ -202,8 +211,18 @@ function scoreRoll(category) {
 }
 
 function checkUpperBonus() {
-	const scorecardValues = Object.values(scorecard);
-	console.log(scorecardValues);
+	const uppSctValues = Object.values(scorecard).slice(0, 6);
+	const upperSubtotal = uppSctValues.reduce((a, current) => a + current, 0);
+	const uppSbtotElement = document.getElementById("uppersection-subtotal");
+	uppSbtotElement.innerHTML = upperSubtotal;
+	const uppBnsElement = document.getElementById("upperbonus-score");
+	if (upperSubtotal >= 63) {
+		scorecard.upperbonus == 35;
+		uppBnsElement.innerHTML = 35;
+	} else if (!uppSctValues.includes(null)) {
+		scorecard.upperbonus = 0;
+		uppBnsElement.innerHTML = 0;
+	}
 }
 
 function resetDice() {
@@ -217,6 +236,10 @@ function resetDice() {
 		}
 	});
 	place();
+}
+
+function resetScorecard() {
+	Object.keys(scorecard).forEach((key) => (scorecard[key] = null));
 }
 
 function playShakeSound() {
@@ -253,6 +276,11 @@ function clearGrid() {
 	}
 }
 
+function newGame() {
+	//reset scorecard constant and show buttons again
+	//reset turn and roll numbers
+}
+
 function changeButton() {
 	// Change "Play!" button to say "Stop" while timer is running, and reset to "Play!" after timer ends
 	var playBtn = document.getElementById("play");
@@ -287,15 +315,17 @@ function dieListeners() {
 }
 
 function lockUnlock(i) {
-	var lockID = "lock" + i;
+	if (dice[i].value != null) {
+		var lockID = "lock" + i;
 
-	if (dice[i].locked == false) {
-		// if die was unlocked, lock and show lock icon
-		dice[i].locked = true;
-		document.getElementById(lockID).style.visibility = "visible";
-	} else {
-		// if die was locked, unlock and hide lock icon
-		dice[i].locked = false;
-		document.getElementById(lockID).style.visibility = "hidden";
-	}
+		if (dice[i].locked == false) {
+			// if die was unlocked, lock and show lock icon
+			dice[i].locked = true;
+			document.getElementById(lockID).style.visibility = "visible";
+		} else {
+			// if die was locked, unlock and hide lock icon
+			dice[i].locked = false;
+			document.getElementById(lockID).style.visibility = "hidden";
+		}
+	} else console.log("Cannot lock a null die");
 }

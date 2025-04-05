@@ -1,313 +1,577 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Dice Roller</title>
-    <link rel="icon" href="die2.ico">
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous" />
-    <style>
-      .die {
-        height: 3rem;
-        width: 3rem;
-        background-color: #960000;
-        color: white;
-        text-align: center;
-        font-size: xx-large;
-        display: inline-block;
-        margin-bottom: 5px;
-        margin-right: 5px;
-        vertical-align: top;
-      }
-      .dice-icon{
-        height: 2rem;
-        width: 2rem;
-      }
-      .lock{
-        height: 3rem;
-        width: 3rem;
-        margin-bottom: 5px;
-        margin-right: 5px;
-        vertical-align: top;
-        font-size: xx-large;
-        display: inline-block;
-      }
-    </style>
-  </head>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Dice Roller</title>
+		<link rel="icon" href="die2.ico" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+			crossorigin="anonymous" />
+		<style>
+			.die {
+				height: 3rem;
+				width: 3rem;
+				background-color: #960000;
+				color: white;
+				text-align: center;
+				font-size: xx-large;
+				display: inline-block;
+				margin-bottom: 5px;
+				margin-right: 5px;
+				vertical-align: top;
+			}
+			.dice-icon {
+				height: 2rem;
+				width: 2rem;
+			}
+			.lock {
+				height: 3rem;
+				width: 3rem;
+				margin-bottom: 5px;
+				margin-right: 5px;
+				vertical-align: top;
+				font-size: xx-large;
+				display: inline-block;
+			}
+		</style>
+	</head>
 
-  <body onload="addListeners()" data-bs-theme="light">
-    <header>
-      <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-        <div class="container-fluid">
-          <a class="navbar-brand">Dice Roller</a>
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Play</a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                data-bs-toggle="modal"
-                data-bs-target="#rulesModal"
-                style="cursor: pointer;"
-                >Rules</a
-              >
-            </li>
-            <li class="nav-item dropdown">
-              <div>
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Options
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown" data-bs-theme="light">
-                <div class="container">
-                  <h6 class="dropdown-header">Audio Options</h6>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" autocomplete="off" type="checkbox" role="switch" id="switchShakingAudio" checked>
-                    <label class="form-check-label" for="switchShakingAudio">Play shaking sounds</label>
-                  </div>
-                <div class="dropdown-divider"></div>
-                <h6 class="dropdown-header">Display Options</h6>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" autocomplete="off" type="checkbox" role="switch" id="switchDarkMode">
-                  <label class="form-check-label" for="switchDarkMode">Dark mode</label>
-                </div>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" autocomplete="off" type="checkbox" role="switch" id="switchDiceShake" checked>
-                  <label class="form-check-label" for="switchGridShake">Show dice shaking</label>
-                </div>
-              </div>
-              </div>
-            </li>
-        </ul>
-        </div>
-      </nav>
-    </header>
+	<body onload="addListeners()" data-bs-theme="light">
+		<header>
+			<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+				<div class="container-fluid">
+					<a class="navbar-brand">Dice Roller</a>
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="#">Play</a>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								data-bs-toggle="modal"
+								data-bs-target="#rulesModal"
+								style="cursor: pointer"
+								>Rules</a
+							>
+						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								data-bs-toggle="modal"
+								data-bs-target="#scoresModal"
+								style="cursor: pointer"
+								>My High Scores</a
+							>
+						</li>
+						<li class="nav-item dropdown">
+							<a
+								class="nav-link dropdown-toggle"
+								href="#"
+								id="navbarDropdown"
+								role="button"
+								data-bs-toggle="dropdown"
+								aria-haspopup="true"
+								aria-expanded="false">
+								Options
+							</a>
+							<div
+								class="dropdown-menu"
+								aria-labelledby="navbarDropdown"
+								data-bs-theme="light">
+								<div class="container">
+									<h6 class="dropdown-header">Audio Options</h6>
+									<div class="form-check form-switch">
+										<input
+											class="form-check-input"
+											autocomplete="off"
+											type="checkbox"
+											role="switch"
+											id="switchShakingAudio"
+											checked />
+										<label class="form-check-label" for="switchShakingAudio"
+											>Play shaking sounds</label
+										>
+									</div>
+									<div class="dropdown-divider"></div>
+									<h6 class="dropdown-header">Display Options</h6>
+									<div class="form-check form-switch">
+										<input
+											class="form-check-input"
+											autocomplete="off"
+											type="checkbox"
+											role="switch"
+											id="switchDarkMode" />
+										<label class="form-check-label" for="switchDarkMode"
+											>Dark mode</label
+										>
+									</div>
+									<div class="form-check form-switch">
+										<input
+											class="form-check-input"
+											autocomplete="off"
+											type="checkbox"
+											role="switch"
+											id="switchDiceShake"
+											checked />
+										<label class="form-check-label" for="switchGridShake"
+											>Show dice shaking</label
+										>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</header>
 
-    <main>
-      <div class="container text-center">
-        <div class="container">
+		<main>
+			<div class="container text-center">
+				<div class="container">
+					<div class="container" id="turnAndRollCountsHolder">
+						<table>
+							<tr>
+								<th>Turn Number:</th>
+								<td id="turnCount">0/13</td>
+							</tr>
+							<tr>
+								<th>Roll Number:</th>
+								<td id="rollCount">0/3</td>
+							</tr>
+						</table>
+					</div>
 
-          <div class="container" id="turnAndRollCountsHolder">
-            
-          
-          <table>
-            <tr>
-              <th>Turn Number:</th>
-              <td id="turnCount">0/13</td>
-            </tr>
-            <tr>
-              <th>Roll Number:</th>
-              <td id="rollCount">0/3</td>
-            </tr>
-          </table>
-          </div>
+					<div class="container" id="gridholder">
+						<div class="container text-center" id="grid">
+							<div class="row">
+								<div class="col">
+									<span class="die rounded shadow-sm" id="die0"></span>
+									<span class="die rounded shadow-sm" id="die1"></span>
+									<span class="die rounded shadow-sm" id="die2"></span>
+									<span class="die rounded shadow-sm" id="die3"></span>
+									<span class="die rounded shadow-sm" id="die4"></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<span
+										class="lock rounded shadow-sm"
+										id="lock0"
+										style="visibility: hidden"
+										><img src="lock.png"
+									/></span>
+									<span
+										class="lock rounded shadow-sm"
+										id="lock1"
+										style="visibility: hidden"
+										><img src="lock.png"
+									/></span>
+									<span
+										class="lock rounded shadow-sm"
+										id="lock2"
+										style="visibility: hidden"
+										><img src="lock.png"
+									/></span>
+									<span
+										class="lock rounded shadow-sm"
+										id="lock3"
+										style="visibility: hidden"
+										><img src="lock.png"
+									/></span>
+									<span
+										class="lock rounded shadow-sm"
+										id="lock4"
+										style="visibility: hidden"
+										><img src="lock.png"
+									/></span>
+								</div>
+							</div>
+						</div>
+					</div>
 
-          <div class="container" id="gridholder">
-            <div class="container text-center" id="grid">
-              <div class="row">
-                <div class="col">
-                  <span class="die rounded shadow-sm" id="die0"></span>
-                  <span class="die rounded shadow-sm" id="die1"></span>
-                  <span class="die rounded shadow-sm" id="die2"></span>
-                  <span class="die rounded shadow-sm" id="die3"></span>
-                  <span class="die rounded shadow-sm" id="die4"></span>
-                </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <span class = "lock rounded shadow-sm" id="lock0" style="visibility: hidden;"><img src="lock.png"></span>
-                <span class = "lock rounded shadow-sm" id="lock1" style="visibility: hidden;"><img src="lock.png"></span>
-                <span class = "lock rounded shadow-sm" id="lock2" style="visibility: hidden;"><img src="lock.png"></span>
-                <span class = "lock rounded shadow-sm" id="lock3" style="visibility: hidden;"><img src="lock.png"></span>
-                <span class = "lock rounded shadow-sm" id="lock4" style="visibility: hidden;"><img src="lock.png"></span>
-              </div>
-            </div>
-          </div>
+					<div class="container" id="btnholder">
+						<div class="container-fluid">
+							<button
+								type="button"
+								class="btn btn-primary btn-lg"
+								onclick="play()"
+								id="play">
+								Roll!
+							</button>
+						</div>
+					</div>
 
-          <div class = "container" id="btnholder">
-            <div class="container-fluid">
-            <button
-              type="button"
-              class="btn btn-primary btn-lg"
-              onclick="play()"
-              id="play">
-              Roll!
-            </button>
-           </div>
-          </div>
+					<div id="scorecard">
+						<table class="table">
+							<tr>
+								<th>Upper Section</th>
+								<th></th>
+								<th>How It's Scored</th>
+								<th>Score</th>
+							</tr>
+							<tr>
+								<th>Aces</th>
+								<th>
+									<img
+										src="dice-light-1.png"
+										width="10"
+										height="10"
+										class="dice-icon" />
+								</th>
+								<td>Total of Aces only</td>
+								<td id="aces-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-aces"
+										onclick="scoreRoll('aces')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Twos</th>
+								<th>
+									<img
+										src="dice-light-2.png"
+										width="10"
+										height="10"
+										class="dice-icon" />
+								</th>
+								<td>Total of Twos only</td>
+								<td id="twos-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-twos"
+										onclick="scoreRoll('twos')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Threes</th>
+								<th>
+									<img
+										src="dice-light-3.png"
+										width="10"
+										height="10"
+										class="dice-icon" />
+								</th>
+								<td>Total of Threes only</td>
+								<td id="threes-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-threes"
+										onclick="scoreRoll('threes')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Fours</th>
+								<th>
+									<img
+										src="dice-light-4.png"
+										width="10"
+										height="10"
+										class="dice-icon" />
+								</th>
+								<td>Total of Fours only</td>
+								<td id="fours-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-fours"
+										onclick="scoreRoll('fours')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Fives</th>
+								<th>
+									<img
+										src="dice-light-5.png"
+										width="10"
+										height="10"
+										class="dice-icon" />
+								</th>
+								<td>Total of Fives only</td>
+								<td id="fives-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-fives"
+										onclick="scoreRoll('fives')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Sixes</th>
+								<th>
+									<img
+										src="dice-light-6.png"
+										width="10"
+										height="10"
+										class="dice-icon" />
+								</th>
+								<td>Total of Sixes only</td>
+								<td id="sixes-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-sixes"
+										onclick="scoreRoll('sixes')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Upper Subtotal</th>
+								<td></td>
+								<td></td>
+								<td id="uppersection-subtotal"></td>
+							</tr>
+							<tr>
+								<th>Bonus</th>
+								<td></td>
+								<td>Score 35 if Upper Subtotal is 63 or more</td>
+								<td id="upperbonus-score"></td>
+							</tr>
+							<tr>
+								<th>Upper Section Total</th>
+								<td></td>
+								<td></td>
+								<td id="uppersection-score"></td>
+							</tr>
+							<tr></tr>
+							<tr>
+								<th>Lower Section</th>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>3 of a Kind</th>
+								<td></td>
+								<td>Total of All Dice</td>
+								<td id="threeofakind-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-threeofakind"
+										onclick="scoreRoll('threeofakind')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>4 of a Kind</th>
+								<td></td>
+								<td>Total of All Dice</td>
+								<td id="fourofakind-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-fourofakind"
+										onclick="scoreRoll('fourofakind')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Full House</th>
+								<td></td>
+								<td>Score 25</td>
+								<td id="fullhouse-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-fullhouse"
+										onclick="scoreRoll('fullhouse')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Small Straight - Sequence of 4</th>
+								<td></td>
+								<td>Score 30</td>
+								<td id="smallstraight-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-smallstraight"
+										onclick="scoreRoll('smallstraight')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Large Straight - Sequence of 5</th>
+								<td></td>
+								<td>Score 40</td>
+								<td id="largestraight-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-largestraight"
+										onclick="scoreRoll('largestraight')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>5 of a Kind</th>
+								<td></td>
+								<td>Score 50</td>
+								<td id="firstyahtzee-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-firstyahtzee"
+										onclick="scoreRoll('firstyahtzee')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Chance</th>
+								<td></td>
+								<td>Total of All Dice</td>
+								<td id="chance-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-chance"
+										onclick="scoreRoll('chance')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>5 of a kind Bonus</th>
+								<td></td>
+								<td>100 for Each Bonus</td>
+								<td id="bonusyahtzees-score">
+									<button
+										class="btn btn-primary"
+										id="use-roll-chance"
+										onclick="scoreRoll('bonusyahtzees')">
+										Use this Roll
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<th>Lower Section Total</th>
+								<td></td>
+								<td></td>
+								<td id="lowersection-score"></td>
+							</tr>
+							<tr>
+								<th>GRAND TOTAL</th>
+								<td></td>
+								<td></td>
+								<td id="grandtotal-score"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</main>
 
-        <div id="scorecard">
-          <table class="table">
-            <tr>
-              <th>Upper Section</th>
-              <th></th>
-              <th>How It's Scored</th>
-              <th>Score</th>
-            </tr>
-            <tr>
-              <th>Aces</th>
-              <th><img src="dice-light-1.png" width="10" height="10" class="dice-icon"></th>
-              <td>Total of Aces only</td>
-              <td id="aces-score"><button class="btn btn-primary" id="use-roll-aces" onclick="scoreRoll('aces')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Twos</th>
-              <th><img src="dice-light-2.png" width="10" height="10" class="dice-icon"></th>
-              <td>Total of Twos only</td>
-              <td id="twos-score"><button class="btn btn-primary" id="use-roll-twos" onclick="scoreRoll('twos')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Threes</th>
-              <th><img src="dice-light-3.png" width="10" height="10" class="dice-icon"></th>
-              <td>Total of Threes only</td>
-              <td id="threes-score"><button class="btn btn-primary" id="use-roll-threes" onclick="scoreRoll('threes')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Fours</th>
-              <th><img src="dice-light-4.png" width="10" height="10" class="dice-icon"></th>
-              <td>Total of Fours only</td>
-              <td id="fours-score"><button class="btn btn-primary" id="use-roll-fours" onclick="scoreRoll('fours')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Fives</th>
-              <th><img src="dice-light-5.png" width="10" height="10" class="dice-icon"></th>
-              <td>Total of Fives only</td>
-              <td id="fives-score"><button class="btn btn-primary" id="use-roll-fives" onclick="scoreRoll('fives')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Sixes</th>
-              <th><img src="dice-light-6.png" width="10" height="10" class="dice-icon"></th>
-              <td>Total of Sixes only</td>
-              <td id="sixes-score"><button class="btn btn-primary" id="use-roll-sixes" onclick="scoreRoll('sixes')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Upper Subtotal</th>
-              <td></td>
-              <td></td>
-              <td id="uppersection-subtotal"></td>
-            </tr>
-            <tr>
-              <th>Bonus</th>
-              <td></td>
-              <td>Score 35 if Upper Subtotal is 63 or more</td>
-              <td id="upperbonus-score"></td>
-            </tr>
-            <tr>
-              <th>Upper Section Total</th>
-              <td></td>
-              <td></td>
-              <td id="uppersection-score"></td>
-            </tr>
-            <tr></tr>
-            <tr>
-              <th>Lower Section</th>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <th>3 of a Kind</th>
-              <td></td>
-              <td>Total of All Dice</td>
-              <td id="threeofakind-score"><button class="btn btn-primary" id="use-roll-threeofakind" onclick="scoreRoll('threeofakind')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>4 of a Kind</th>
-              <td></td>
-              <td>Total of All Dice</td>
-              <td id="fourofakind-score"><button class="btn btn-primary" id="use-roll-fourofakind" onclick="scoreRoll('fourofakind')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Full House</th>
-              <td></td>
-              <td>Score 25</td>
-              <td id="fullhouse-score"><button class="btn btn-primary" id="use-roll-fullhouse" onclick="scoreRoll('fullhouse')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Small Straight - Sequence of 4</th>
-              <td></td>
-              <td>Score 30</td>
-              <td id="smallstraight-score"><button class="btn btn-primary" id="use-roll-smallstraight" onclick="scoreRoll('smallstraight')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Large Straight - Sequence of 5</th>
-              <td></td>
-              <td>Score 40</td>
-              <td id="largestraight-score"><button class="btn btn-primary" id="use-roll-largestraight" onclick="scoreRoll('largestraight')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>5 of a Kind</th>
-              <td></td>
-              <td>Score 50</td>
-              <td id="firstyahtzee-score"><button class="btn btn-primary" id="use-roll-firstyahtzee" onclick="scoreRoll('firstyahtzee')">Use this Roll</button></td>
-            </tr>
-            <tr>
-              <th>Chance</th>
-              <td></td>
-              <td>Total of All Dice</td>
-              <td id="chance-score"><button class="btn btn-primary" id="use-roll-chance" onclick="scoreRoll('chance')">Use this Roll</button></td>
-            </tr>
-          </table>
-        </div>
+		<!-- RULES MODAL -->
+		<div
+			class="modal fade"
+			id="rulesModal"
+			tabindex="-1"
+			aria-labelledby="rulesModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="rulesModalLabel">Rules</h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body text-left">
+						<p>
+							On each turn, roll the dice up to 3 times to get the highest
+							scoring combination for one of 13 categories. After you finish
+							rolling, you must choose which category box you will use the roll
+							for. The game ends after you fill in all 13 categories.
+						</p>
+						<p></p>
+					</div>
 
-      </div>
-      
-    </main>
+					<div class="modal-footer">
+						<button
+							type="button"
+							class="btn btn-secondary"
+							data-bs-dismiss="modal">
+							Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <footer></footer>
+		<!-- SCORES MODAL -->
+		<div
+			class="modal fade"
+			id="scoresModal"
+			tabindex="-1"
+			aria-labelledby="scoresModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="scoresModalLabel">
+							My High Scores
+						</h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body text-left">
+						<table>
+							<tr>
+								<th></th>
+							</tr>
+						</table>
+						<p></p>
+					</div>
 
-    <!-- RULES MODAL -->
-    <div
-      class="modal fade"
-      id="rulesModal"
-      tabindex="-1"
-      aria-labelledby="rulesModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="rulesModalLabel">Rules</h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-left">
-            <p>
-              On each turn, roll the dice up to 3 times to get the highest scoring combination for one of 13 categories. After you finish rolling, you must choose which category box you will use the roll for. The game ends after you fill in all 13 categories.
-            </p>
-            <p>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal">
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							class="btn btn-secondary"
+							data-bs-dismiss="modal">
+							Close
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
+		<!-- BOOTSTRAP/SCRIPT  -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+			crossorigin="anonymous"></script>
+		<script src="script.js"></script>
+	</body>
 
-        <!-- BOOTSTRAP/SCRIPT  -->
-        <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
-      <script src="script.js"></script>
-
-  </body>
-
-  <footer>
-    <p>Dice favicon created by <a href="https://www.favicon.cc/?action=icon&file_id=391429">WSPanic</a></p>
-    <p>Dice icons created by <a href="https://www.flaticon.com/packs/casino-and-card-games">Mike Zuidgeest</a></p>
-    <a target="_blank" href="https://icons8.com/icon/eZFsxclIFHkH/lock">Lock</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
-  </footer>
+	<footer>
+		<p>
+			Dice favicon created by
+			<a href="https://www.favicon.cc/?action=icon&file_id=391429">WSPanic</a>
+		</p>
+		<p>
+			Dice icons created by
+			<a href="https://www.flaticon.com/packs/casino-and-card-games"
+				>Mike Zuidgeest</a
+			>
+		</p>
+		<a target="_blank" href="https://icons8.com/icon/eZFsxclIFHkH/lock">Lock</a>
+		icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+	</footer>
 </html>
