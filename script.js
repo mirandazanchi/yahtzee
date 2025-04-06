@@ -25,6 +25,11 @@ const options = {
 			}
 		},
 	},
+	diceDisplayAsNumber: {
+		element: document.getElementById("diceDisplayRadio1"),
+		value: true,
+		update: (option) => (option.value = option.element.checked),
+	},
 };
 
 const dice = {
@@ -50,9 +55,6 @@ const dice = {
 	},
 };
 
-var turnCount = 0;
-var rollCount = 0;
-
 const scorecard = {
 	aces: null,
 	twos: null,
@@ -68,8 +70,13 @@ const scorecard = {
 	largestraight: null,
 	firstyahtzee: null,
 	chance: null,
-	bonusyahtzees: null,
+	bonusyahtzee1: null,
+	bonusyahtzee2: null,
+	bonusyahtzee3: null,
 };
+
+var turnCount = 0;
+var rollCount = 0;
 
 // jacob's hi score: 270
 
@@ -146,8 +153,6 @@ function checkStraight(diceValues, strtLen) {
 	}
 }
 
-function scoreBonusYahtzee() {}
-
 function scoreRoll(category) {
 	const diceValues = [
 		dice[0].value,
@@ -193,12 +198,16 @@ function scoreRoll(category) {
 	var score = scoreRules[category]();
 
 	scorecard[category] = score;
-	var scoreElement = document.querySelector("#" + category + "-score");
+	var scoreElement = document.getElementById(category + "-score");
 	scoreElement.innerHTML = score;
+	scoreElement.style.display = "";
+	var btnElement = document.getElementById("use-roll-" + category);
+	btnElement.style.display = "none";
 	rollCount = 0;
 	document.getElementById("rollCount").textContent = rollCount + "/3";
 	iterateTurn();
 	checkUpperBonus();
+	updateTotals();
 	return score;
 
 	function scorebyFreq(n) {
@@ -210,11 +219,20 @@ function scoreRoll(category) {
 	}
 }
 
+function scoreYahtzee(highestFreq, category) {
+	if (category == firstyahtzee) {
+		if (highestFreq == 5) {
+			return 50;
+		} else {
+			return 0;
+		}
+	}
+}
+
 function checkUpperBonus() {
 	const uppSctValues = Object.values(scorecard).slice(0, 6);
 	const upperSubtotal = uppSctValues.reduce((a, current) => a + current, 0);
-	const uppSbtotElement = document.getElementById("uppersection-subtotal");
-	uppSbtotElement.innerHTML = upperSubtotal;
+	document.getElementById("uppersection-subtotal").innerHTML = upperSubtotal;
 	const uppBnsElement = document.getElementById("upperbonus-score");
 	if (upperSubtotal >= 63) {
 		scorecard.upperbonus == 35;
@@ -223,6 +241,17 @@ function checkUpperBonus() {
 		scorecard.upperbonus = 0;
 		uppBnsElement.innerHTML = 0;
 	}
+	const upperTotal = upperSubtotal + scorecard.upperbonus;
+	document.getElementById("uppersection-score").innerHTML = upperTotal;
+}
+
+function updateTotals() {
+	const lwrSctValues = Object.values(scorecard).slice(7, undefined);
+	const lowerTotal = lwrSctValues.reduce((a, current) => a + current, 0);
+	document.getElementById("lowersection-score").innerHTML = lowerTotal;
+
+	const grandTotal = Object.values(scorecard).reduce((a, cur) => a + cur, 0);
+	document.getElementById("grandtotal-score").innerHTML = grandTotal;
 }
 
 function resetDice() {
@@ -277,21 +306,39 @@ function clearGrid() {
 }
 
 function newGame() {
-	//reset scorecard constant and show buttons again
-	//reset turn and roll numbers
+	resetDice();
+	Object.keys(scorecard).forEach((category) => (scorecard[category] = null));
+
+	Object.keys(scorecard).forEach((category) => {
+		var btnElement = document.getElementById("use-roll-" + category);
+		var scoreElement = document.getElementById(category + "-score");
+
+		if (btnElement != null) {
+			btnElement.style.display = "";
+		}
+		if (scoreElement != null) {
+			scoreElement.style.display = "none";
+		}
+	});
+
+	turnCount = 0;
+	rollCount = 0;
+
+	document.getElementById("turnCount").textContent = turnCount + "/13";
+	document.getElementById("rollCount").textContent = rollCount + "/3";
+	document.getElementById("uppersection-subtotal").innerHTML = "0";
+	document.getElementById("upperbonus-score").innerHTML = "";
+	document.getElementById("uppersection-score").innerHTML = "0";
+	document.getElementById("lowersection-score").innerHTML = "0";
+	document.getElementById("grandtotal-score").innerHTML = "0";
 }
 
-function changeButton() {
-	// Change "Play!" button to say "Stop" while timer is running, and reset to "Play!" after timer ends
-	var playBtn = document.getElementById("play");
-	if (playBtn.innerText == "Play!") {
-		playBtn.innerText = "Stop";
-		playBtn.onclick = stopGame;
-	} else if (playBtn.innerText == "Stop") {
-		playBtn.innerText = "Play!";
-		playBtn.onclick = play;
-	}
-}
+// function useScoreCookies() {
+//  if (document.cookie ==""){
+
+//  }
+
+// }
 
 function addListeners() {
 	switchListeners();
@@ -327,5 +374,5 @@ function lockUnlock(i) {
 			dice[i].locked = false;
 			document.getElementById(lockID).style.visibility = "hidden";
 		}
-	} else console.log("Cannot lock a null die");
+	}
 }

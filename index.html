@@ -120,6 +120,28 @@
 											>Show dice shaking</label
 										>
 									</div>
+									<h6 class="dropdown-header">Show dice as</h6>
+									<div class="form-check">
+										<input
+											class="form-check-input"
+											type="radio"
+											name="diceDisplayRadio"
+											id="diceDisplayRadio1"
+											checked />
+										<label class="form-check-label" for="diceDisplayRadio1">
+											Numbers
+										</label>
+									</div>
+									<div class="form-check">
+										<input
+											class="form-check-input"
+											type="radio"
+											name="diceDisplayRadio"
+											id="diceDisplayRadio2" />
+										<label class="form-check-label" for="diceDisplayRadio2">
+											Dice
+										</label>
+									</div>
 								</div>
 							</div>
 						</li>
@@ -153,6 +175,9 @@
 									<span class="die rounded shadow-sm" id="die2"></span>
 									<span class="die rounded shadow-sm" id="die3"></span>
 									<span class="die rounded shadow-sm" id="die4"></span>
+									<!-- <button
+										class="btn rounded shadow-sm die"
+										id="roller"></button> -->
 								</div>
 							</div>
 							<div class="row">
@@ -192,7 +217,7 @@
 						</div>
 					</div>
 
-					<div class="container" id="btnholder">
+					<div class="container my-3" id="btnholder">
 						<div class="container-fluid">
 							<button
 								type="button"
@@ -201,11 +226,18 @@
 								id="play">
 								Roll!
 							</button>
+							<button
+								type="button"
+								class="btn btn-primary btn-lg"
+								onclick="newGame()"
+								id="newGame">
+								New Game
+							</button>
 						</div>
 					</div>
 
-					<div id="scorecard">
-						<table class="table">
+					<div id="scorecard" class="container">
+						<table class="container table table-striped w-auto align-middle">
 							<tr>
 								<th>Upper Section</th>
 								<th></th>
@@ -222,7 +254,8 @@
 										class="dice-icon" />
 								</th>
 								<td>Total of Aces only</td>
-								<td id="aces-score">
+								<td>
+									<span id="aces-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-aces"
@@ -241,7 +274,8 @@
 										class="dice-icon" />
 								</th>
 								<td>Total of Twos only</td>
-								<td id="twos-score">
+								<td>
+									<span id="twos-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-twos"
@@ -260,7 +294,8 @@
 										class="dice-icon" />
 								</th>
 								<td>Total of Threes only</td>
-								<td id="threes-score">
+								<td>
+									<span id="threes-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-threes"
@@ -279,7 +314,8 @@
 										class="dice-icon" />
 								</th>
 								<td>Total of Fours only</td>
-								<td id="fours-score">
+								<td>
+									<span id="fours-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-fours"
@@ -298,7 +334,8 @@
 										class="dice-icon" />
 								</th>
 								<td>Total of Fives only</td>
-								<td id="fives-score">
+								<td>
+									<span id="fives-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-fives"
@@ -317,7 +354,8 @@
 										class="dice-icon" />
 								</th>
 								<td>Total of Sixes only</td>
-								<td id="sixes-score">
+								<td>
+									<span id="sixes-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-sixes"
@@ -330,21 +368,26 @@
 								<th>Upper Subtotal</th>
 								<td></td>
 								<td></td>
-								<td id="uppersection-subtotal"></td>
+								<td>
+									<span id="uppersection-subtotal">0</span>
+								</td>
 							</tr>
 							<tr>
 								<th>Bonus</th>
 								<td></td>
 								<td>Score 35 if Upper Subtotal is 63 or more</td>
-								<td id="upperbonus-score"></td>
+								<td>
+									<span id="upperbonus-score"></span>
+								</td>
 							</tr>
 							<tr>
 								<th>Upper Section Total</th>
 								<td></td>
 								<td></td>
-								<td id="uppersection-score"></td>
+								<td>
+									<span id="uppersection-score">0</span>
+								</td>
 							</tr>
-							<tr></tr>
 							<tr>
 								<th>Lower Section</th>
 								<td></td>
@@ -355,7 +398,8 @@
 								<th>3 of a Kind</th>
 								<td></td>
 								<td>Total of All Dice</td>
-								<td id="threeofakind-score">
+								<td>
+									<span id="threeofakind-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-threeofakind"
@@ -368,7 +412,8 @@
 								<th>4 of a Kind</th>
 								<td></td>
 								<td>Total of All Dice</td>
-								<td id="fourofakind-score">
+								<td>
+									<span id="fourofakind-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-fourofakind"
@@ -381,7 +426,8 @@
 								<th>Full House</th>
 								<td></td>
 								<td>Score 25</td>
-								<td id="fullhouse-score">
+								<td>
+									<span id="fullhouse-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-fullhouse"
@@ -391,10 +437,11 @@
 								</td>
 							</tr>
 							<tr>
-								<th>Small Straight - Sequence of 4</th>
+								<th>Small Straight<br />(Sequence of 4)</th>
 								<td></td>
 								<td>Score 30</td>
-								<td id="smallstraight-score">
+								<td>
+									<span id="smallstraight-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-smallstraight"
@@ -404,10 +451,11 @@
 								</td>
 							</tr>
 							<tr>
-								<th>Large Straight - Sequence of 5</th>
+								<th>Large Straight<br />(Sequence of 5)</th>
 								<td></td>
 								<td>Score 40</td>
-								<td id="largestraight-score">
+								<td>
+									<span id="largestraight-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-largestraight"
@@ -420,7 +468,8 @@
 								<th>5 of a Kind</th>
 								<td></td>
 								<td>Score 50</td>
-								<td id="firstyahtzee-score">
+								<td>
+									<span id="firstyahtzee-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-firstyahtzee"
@@ -433,7 +482,8 @@
 								<th>Chance</th>
 								<td></td>
 								<td>Total of All Dice</td>
-								<td id="chance-score">
+								<td>
+									<span id="chance-score"></span>
 									<button
 										class="btn btn-primary"
 										id="use-roll-chance"
@@ -443,15 +493,30 @@
 								</td>
 							</tr>
 							<tr>
-								<th>5 of a kind Bonus</th>
+								<th>5 of a Kind Bonus</th>
 								<td></td>
 								<td>100 for Each Bonus</td>
-								<td id="bonusyahtzees-score">
+								<td>
+									<span id="bonusyahtzee1-score"></span>
 									<button
 										class="btn btn-primary"
-										id="use-roll-chance"
-										onclick="scoreRoll('bonusyahtzees')">
-										Use this Roll
+										id="use-roll-bonusyahtzee1"
+										onclick="scoreRoll('bonusyahtzee1')">
+										X
+									</button>
+									<span id="bonusyahtzee2-score"></span>
+									<button
+										class="btn btn-primary"
+										id="use-roll-bonusyahtzee2"
+										onclick="scoreRoll('bonusyahtzee2')">
+										X
+									</button>
+									<span id="bonusyahtzee3-score"></span>
+									<button
+										class="btn btn-primary"
+										id="use-roll-bonusyahtzee3"
+										onclick="scoreRoll('bonusyahtzee3')">
+										X
 									</button>
 								</td>
 							</tr>
@@ -459,19 +524,40 @@
 								<th>Lower Section Total</th>
 								<td></td>
 								<td></td>
-								<td id="lowersection-score"></td>
+								<td>
+									<span id="lowersection-score">0</span>
+								</td>
 							</tr>
 							<tr>
 								<th>GRAND TOTAL</th>
 								<td></td>
 								<td></td>
-								<td id="grandtotal-score"></td>
+								<td>
+									<span id="grandtotal-score">0</span>
+								</td>
 							</tr>
 						</table>
 					</div>
 				</div>
 			</div>
 		</main>
+
+		<footer
+			class="mt-auto py-3 footer text-center text-muted fs-6 fw-lighter bg-light">
+			<span class="fs-6 align-middle">
+				Dice favicon created by
+				<a href="https://www.favicon.cc/?action=icon&file_id=391429">WSPanic</a>
+				| Dice icons created by
+				<a href="https://www.flaticon.com/packs/casino-and-card-games"
+					>Mike Zuidgeest</a
+				>
+				|
+				<a target="_blank" href="https://icons8.com/icon/eZFsxclIFHkH/lock"
+					>Lock</a
+				>
+				icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+			</span>
+		</footer>
 
 		<!-- RULES MODAL -->
 		<div
@@ -552,6 +638,46 @@
 			</div>
 		</div>
 
+		<!-- GAME OVER MODAL -->
+		<div
+			class="modal fade"
+			id="gameOverModal"
+			tabindex="-1"
+			aria-labelledby="gameOverModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="gameOverModalLabel">Game Over!</h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body text-left">
+						<p id="scoreModalText"></p>
+					</div>
+
+					<div class="modal-footer">
+						<button
+							type="button"
+							class="btn btn-secondary"
+							data-bs-dismiss="modal">
+							Close
+						</button>
+						<button
+							type="button"
+							class="btn btn-primary"
+							onclick="newGame()"
+							data-bs-dismiss="modal">
+							New Game
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- BOOTSTRAP/SCRIPT  -->
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -559,19 +685,4 @@
 			crossorigin="anonymous"></script>
 		<script src="script.js"></script>
 	</body>
-
-	<footer>
-		<p>
-			Dice favicon created by
-			<a href="https://www.favicon.cc/?action=icon&file_id=391429">WSPanic</a>
-		</p>
-		<p>
-			Dice icons created by
-			<a href="https://www.flaticon.com/packs/casino-and-card-games"
-				>Mike Zuidgeest</a
-			>
-		</p>
-		<a target="_blank" href="https://icons8.com/icon/eZFsxclIFHkH/lock">Lock</a>
-		icon by <a target="_blank" href="https://icons8.com">Icons8</a>
-	</footer>
 </html>
