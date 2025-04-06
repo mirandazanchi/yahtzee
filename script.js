@@ -70,9 +70,7 @@ const scorecard = {
 	largestraight: null,
 	firstyahtzee: null,
 	chance: null,
-	bonusyahtzee1: null,
-	bonusyahtzee2: null,
-	bonusyahtzee3: null,
+	bonusyahtzees: null,
 };
 
 var turnCount = 0;
@@ -100,7 +98,9 @@ function iterateTurn() {
 		document.getElementById("turnCount").textContent = turnCount + "/13";
 		return true;
 	} else {
-		console.log("Game over!");
+		const modal = new bootstrap.Modal(
+			document.getElementById("gameOverModal")
+		).toggle();
 		resetDice();
 		return false;
 	}
@@ -207,6 +207,7 @@ function scoreRoll(category) {
 	document.getElementById("rollCount").textContent = rollCount + "/3";
 	iterateTurn();
 	checkUpperBonus();
+	checkYahtzeeBonus(highestFreq, category);
 	updateTotals();
 	return score;
 
@@ -219,13 +220,13 @@ function scoreRoll(category) {
 	}
 }
 
-function scoreYahtzee(highestFreq, category) {
-	if (category == firstyahtzee) {
-		if (highestFreq == 5) {
-			return 50;
-		} else {
-			return 0;
-		}
+function checkYahtzeeBonus(highestFreq, category) {
+	if (category != "firstyahtzee" && scorecard["firstyahtzee"] == 50) {
+		highestFreq == 5
+			? (scorecard["bonusyahtzees"] = scorecard["bonusyahtzees"] + 100)
+			: null;
+		document.getElementById("bonusyahtzees-score").innerHTML =
+			scorecard["bonusyahtzees"];
 	}
 }
 
@@ -333,16 +334,10 @@ function newGame() {
 	document.getElementById("grandtotal-score").innerHTML = "0";
 }
 
-// function useScoreCookies() {
-//  if (document.cookie ==""){
-
-//  }
-
-// }
-
-function addListeners() {
+function onOpen() {
 	switchListeners();
 	dieListeners();
+	initializeTooltips();
 }
 
 function switchListeners() {
@@ -358,6 +353,15 @@ function dieListeners() {
 		document.getElementById("die" + die).addEventListener("click", () => {
 			lockUnlock(die);
 		});
+	});
+}
+
+function initializeTooltips() {
+	var tooltipTriggerList = [].slice.call(
+		document.querySelectorAll('[data-bs-toggle="tooltip"]')
+	);
+	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl);
 	});
 }
 

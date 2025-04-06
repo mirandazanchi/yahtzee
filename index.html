@@ -39,7 +39,7 @@
 		</style>
 	</head>
 
-	<body onload="addListeners()" data-bs-theme="light">
+	<body onload="onOpen()" data-bs-theme="light">
 		<header>
 			<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
 				<div class="container-fluid">
@@ -236,7 +236,7 @@
 						</div>
 					</div>
 
-					<div id="scorecard" class="container">
+					<div class="container" id="scorecard">
 						<table class="container table table-striped w-auto align-middle">
 							<tr>
 								<th>Upper Section</th>
@@ -251,7 +251,8 @@
 										src="dice-light-1.png"
 										width="10"
 										height="10"
-										class="dice-icon" />
+										class="dice-icon"
+										alt="A die showing 1" />
 								</th>
 								<td>Total of Aces only</td>
 								<td>
@@ -271,7 +272,8 @@
 										src="dice-light-2.png"
 										width="10"
 										height="10"
-										class="dice-icon" />
+										class="dice-icon"
+										alt="A die showing 2" />
 								</th>
 								<td>Total of Twos only</td>
 								<td>
@@ -291,7 +293,8 @@
 										src="dice-light-3.png"
 										width="10"
 										height="10"
-										class="dice-icon" />
+										class="dice-icon"
+										alt="A die showing 3" />
 								</th>
 								<td>Total of Threes only</td>
 								<td>
@@ -311,7 +314,8 @@
 										src="dice-light-4.png"
 										width="10"
 										height="10"
-										class="dice-icon" />
+										class="dice-icon"
+										alt="A die showing 4" />
 								</th>
 								<td>Total of Fours only</td>
 								<td>
@@ -331,7 +335,8 @@
 										src="dice-light-5.png"
 										width="10"
 										height="10"
-										class="dice-icon" />
+										class="dice-icon"
+										alt="A die showing 5" />
 								</th>
 								<td>Total of Fives only</td>
 								<td>
@@ -351,7 +356,8 @@
 										src="dice-light-6.png"
 										width="10"
 										height="10"
-										class="dice-icon" />
+										class="dice-icon"
+										alt="A die showing 6" />
 								</th>
 								<td>Total of Sixes only</td>
 								<td>
@@ -424,7 +430,29 @@
 							</tr>
 							<tr>
 								<th>Full House</th>
-								<td></td>
+								<td>
+									<span>
+										<a
+											class="d-inline-block"
+											href="#"
+											data-bs-toggle="tooltip"
+											title=""
+											data-bs-original-title="A full house is a roll that shows three of one number and two of another number.">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="16"
+												height="16"
+												fill="black"
+												class="bi bi-info-circle"
+												viewBox="0 0 16 16">
+												<path
+													d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+												<path
+													d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+											</svg>
+										</a>
+									</span>
+								</td>
 								<td>Score 25</td>
 								<td>
 									<span id="fullhouse-score"></span>
@@ -437,8 +465,31 @@
 								</td>
 							</tr>
 							<tr>
-								<th>Small Straight<br />(Sequence of 4)</th>
-								<td></td>
+								<th>Small Straight</th>
+								<td>
+									<span>
+										<a
+											id="smallstraight-tooltip"
+											class="d-inline-block"
+											href="#"
+											data-bs-toggle="tooltip"
+											title=""
+											data-bs-original-title="A small straight is a roll that shows a sequence of 4 numbers.">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="16"
+												height="16"
+												fill="black"
+												class="bi bi-info-circle"
+												viewBox="0 0 16 16">
+												<path
+													d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+												<path
+													d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+											</svg>
+										</a>
+									</span>
+								</td>
 								<td>Score 30</td>
 								<td>
 									<span id="smallstraight-score"></span>
@@ -451,8 +502,31 @@
 								</td>
 							</tr>
 							<tr>
-								<th>Large Straight<br />(Sequence of 5)</th>
-								<td></td>
+								<th>Large Straight</th>
+								<td>
+									<span>
+										<a
+											id="largestraight-tooltip"
+											class="d-inline-block"
+											href="#"
+											data-bs-toggle="tooltip"
+											title=""
+											data-bs-original-title="A large straight is a roll that shows a sequence of 5 numbers.">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="16"
+												height="16"
+												fill="black"
+												class="bi bi-info-circle"
+												viewBox="0 0 16 16">
+												<path
+													d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+												<path
+													d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+											</svg>
+										</a>
+									</span>
+								</td>
 								<td>Score 40</td>
 								<td>
 									<span id="largestraight-score"></span>
@@ -494,30 +568,32 @@
 							</tr>
 							<tr>
 								<th>5 of a Kind Bonus</th>
-								<td></td>
+								<td>
+									<span>
+										<a
+											class="d-inline-block"
+											href="#"
+											data-bs-toggle="tooltip"
+											title=""
+											data-bs-original-title="If you've already filled in '5 of a kind' with a 50, any additional 5 of a kind rolls will earn a 100-point bonus! There is no bonus for 5 of a kind rolls if you filled in the '5 of a kind' box with a 0.">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="16"
+												height="16"
+												fill="black"
+												class="bi bi-info-circle"
+												viewBox="0 0 16 16">
+												<path
+													d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+												<path
+													d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+											</svg>
+										</a>
+									</span>
+								</td>
 								<td>100 for Each Bonus</td>
 								<td>
-									<span id="bonusyahtzee1-score"></span>
-									<button
-										class="btn btn-primary"
-										id="use-roll-bonusyahtzee1"
-										onclick="scoreRoll('bonusyahtzee1')">
-										X
-									</button>
-									<span id="bonusyahtzee2-score"></span>
-									<button
-										class="btn btn-primary"
-										id="use-roll-bonusyahtzee2"
-										onclick="scoreRoll('bonusyahtzee2')">
-										X
-									</button>
-									<span id="bonusyahtzee3-score"></span>
-									<button
-										class="btn btn-primary"
-										id="use-roll-bonusyahtzee3"
-										onclick="scoreRoll('bonusyahtzee3')">
-										X
-									</button>
+									<span id="bonusyahtzees-score"></span>
 								</td>
 							</tr>
 							<tr>
